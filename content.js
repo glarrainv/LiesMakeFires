@@ -245,38 +245,47 @@ async function fetchHTML() {
     console.log("Model Response:", response);
     const topResult = response?.best;
 
-    const sources = (response?.top || []).map((item) => item.url);
-    const enriched = (
-        await Promise.all(
-            sources.map((source) =>
-                searchSite(searchQuery, source).catch((err) => ({
-                    error: String(err),
-                    fn: 'searchSite',
-                    url: source,
-                }))
-            )
-        )
-    ).filter(Boolean);
+    async function initSearch() {
 
-    const enrichErrors = enriched.filter((r) => r && r.error);
-    if (enrichErrors.length) {
-        console.warn("Enrichment errors:", enrichErrors);
+        const sources = (response?.top || []).map((item) => item.url);
+
+        const enriched = [];
+        let successes = 0;
+        for (const source of sources) {
+            const result = await searchSite(searchQuery, source).catch((err) => ({
+                error: String(err),
+                fn: 'searchSite',
+                url: source,
+            }));
+            if (!result) continue;
+            enriched.push(result);
+            if (!result.error && ++successes >= 3) break;
+        }
+
+        const enrichErrors = enriched.filter((r) => r && r.error);
+        if (enrichErrors.length) {
+            console.warn("Enrichment errors:", enrichErrors);
+        }
+
+        const validEnriched = enriched.filter((r) => r && r.url && !r.error);
+        const cards = validEnriched.length
+            ? validEnriched
+            : (response?.top || []).map((r) => ({
+                url: r.url,
+                title: new URL(r.url).hostname.replace(/^www\./, ""),
+                desc: r.desc,
+                image: "",
+            }));
+
+        return cards;
+
     }
-
-    const validEnriched = enriched.filter((r) => r && r.url && !r.error);
-    const cards = validEnriched.length
-        ? validEnriched
-        : (response?.top || []).map((r) => ({
-            url: r.url,
-            title: new URL(r.url).hostname.replace(/^www\./, ""),
-            desc: r.desc,
-            image: "",
-        }));
 
     // Score set based on experimentation
     // Used to identify environment focused results
     const minSimilarity = 0.2;
-    if (topResult && topResult.score > minSimilarity && cards.length) {
+    if (topResult.score > minSimilarity) {
+
         const template = await fetch(chrome.runtime.getURL("sampleStructures/googleItem.html")).then(r => r.text());
         const doc = new DOMParser().parseFromString(template, "text/html");
         const styleEl = doc.querySelector("style");
@@ -284,6 +293,8 @@ async function fetchHTML() {
 
         const wrapper = document.createElement("div");
         if (styleEl) wrapper.appendChild(styleEl.cloneNode(true));
+
+        const cards = await initSearch();
 
         cards.slice(0, 3).forEach((result) => {
             const card = cardTemplate.cloneNode(true);

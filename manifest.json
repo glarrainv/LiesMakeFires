@@ -1,8 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Lies Make Fires",
-  "description": "Runs on Google Search.",
+  "name": "Lies Make Fires - Environmental fact checker protecting you right where you search",
+    "short_name": "Lies Make Fires",
+  "description": "The fact checking extension for environmental research. Simple, fast and friendly. Powered by local low consumption text classification model .",
   "version": "1.0",
+  "version_name": "1.0.0 MIT OpenSource Green Hackathon",
   "background": {
     "service_worker": "background.js",
     "type": "module"
