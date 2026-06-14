@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Lies Make Fires",
+  "description": "Runs on Google Search.",
+  "version": "1.0",
+    "content_scripts": [
+        {
+        "matches": ["*://www.google.com/search*"],
+        "js": ["content.js"]
+        }
+    ],
+  "permissions": ["scripting", "activeTab"],
+  "web_accessible_resources": [
+    {
+      "resources": ["GoogleItem.html"],
+      "matches": ["*://www.google.com/*"]
+    }
+  ]
+}
