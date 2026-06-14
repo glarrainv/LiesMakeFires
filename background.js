@@ -1,5 +1,3 @@
-import { fetchHTML } from './middleman.js';
-
 const OFFSCREEN_PATH = 'offscreen.html';
 
 let creating = null;
@@ -31,28 +29,14 @@ async function ensureOffscreenDocument() {
 async function runSimilarity(payload) {
     await ensureOffscreenDocument();
 
-    // 1. Rank the candidate sources locally with the embedding model.
-    const ranking = await chrome.runtime.sendMessage({
+    // Sends message to offscreen.js to run similarity between:
+    // Prompt 3 random source descriptions from each category. Gov, Academic, Private
+    
+    return chrome.runtime.sendMessage({
         target: 'offscreen',
         action: 'getSimilarity',
         payload,
     });
-
-    // 2. Enrich the top sources with a real Google `site:` result. A failure
-    //    here must not break ranking, so the content script can still fall
-    //    back to the locally-known descriptions.
-    const [searchQuery] = payload;
-    const sources = (ranking?.top || []).map((item) => item.url);
-
-    let enriched = [];
-    try {
-        enriched = await fetchHTML(searchQuery, sources);
-    } catch (err) {
-        console.warn('middleman fetchHTML failed:', err);
-    }
-
-    // 3. Return ranking + enriched hits to the content script.
-    return { ...ranking, enriched };
 }
 
 // Pre-warm the offscreen document (and, lazily, the embedding model) so the

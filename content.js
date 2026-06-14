@@ -1,7 +1,7 @@
 async function fetchHTML() {
-const searchQuery = new URLSearchParams(window.location.search).get("q");
+    const searchQuery = new URLSearchParams(window.location.search).get("q");
 
-const urls = {
+    const urls = {
         "academic": {
             "urls": [
                 "https://www.biodiversityheritagelibrary.org/",
@@ -235,81 +235,194 @@ const urls = {
             ]
         }
 
-};
+    };
 
-const response = await chrome.runtime.sendMessage({
-  action: "getSimilarity",
-  payload: [searchQuery, urls]
-});
+    const response = await chrome.runtime.sendMessage({
+        action: "getSimilarity",
+        payload: [searchQuery, urls]
+    });
 
-console.log("Model Response:", response);
-const topResult = response?.best;
-const enriched = response?.enriched || [];
+    console.log("Model Response:", response);
+    const topResult = response?.best;
 
-// Surface any searchSite / extractTopResult failures (kept in `enriched` so the
-// model response carries the error and the function it happened in).
-const enrichErrors = enriched.filter((r) => r && r.error);
-if (enrichErrors.length) {
-  console.warn("Enrichment errors:", enrichErrors);
-}
+    const sources = (response?.top || []).map((item) => item.url);
+    const enriched = (
+        await Promise.all(
+            sources.map((source) =>
+                searchSite(searchQuery, source).catch((err) => ({
+                    error: String(err),
+                    fn: 'searchSite',
+                    url: source,
+                }))
+            )
+        )
+    ).filter(Boolean);
 
-// Prefer the real Google `site:` hits the middleman fetched. Drop error
-// entries from what we render, and fall back to the locally-known source
-// descriptions if nothing enriched successfully.
-const validEnriched = enriched.filter((r) => r && r.url && !r.error);
-const cards = validEnriched.length
-  ? validEnriched
-  : (response?.top || []).map((r) => ({
-      url: r.url,
-      title: new URL(r.url).hostname.replace(/^www\./, ""),
-      desc: r.desc,
-      image: "",
-    }));
-
-if (topResult && topResult.score > 0.15 && cards.length) {
-  const template = await fetch(chrome.runtime.getURL("GoogleItem.html")).then(r => r.text());
-  const doc = new DOMParser().parseFromString(template, "text/html");
-  const styleEl = doc.querySelector("style");
-  const cardTemplate = doc.querySelector(".g");
-
-  // Build one populated card per result (up to 3).
-  const wrapper = document.createElement("div");
-  if (styleEl) wrapper.appendChild(styleEl.cloneNode(true));
-
-  cards.slice(0, 3).forEach((result) => {
-    const card = cardTemplate.cloneNode(true);
-    const domain = new URL(result.url).hostname.replace(/^www\./, "");
-
-    const titleEl = card.querySelector("#articleTitle");
-    const descEl = card.querySelector("#articleDescription");
-    const imgEl = card.querySelector("#articleImage");
-    const link = card.querySelector("a.zReHs");
-    const cont = card.querySelector(".cont");
-
-    // Drop the template ids so the injected cards don't share duplicates.
-    titleEl.removeAttribute("id");
-    descEl.removeAttribute("id");
-    if (imgEl) imgEl.removeAttribute("id");
-
-    titleEl.textContent = result.title || domain;
-    titleEl.style.whiteSpace = "nowrap";
-    descEl.textContent = result.desc;
-    if (link) link.href = result.url;
-    // Keep the template's default icon when no thumbnail was found.
-    if (imgEl && result.image) {
-      imgEl.src = result.image;
-      imgEl.alt = result.title || domain;
+    const enrichErrors = enriched.filter((r) => r && r.error);
+    if (enrichErrors.length) {
+        console.warn("Enrichment errors:", enrichErrors);
     }
 
-    // Container hugs its title instead of stretching to full width.
-    if (cont) cont.style.width = "fit-content";
+    const validEnriched = enriched.filter((r) => r && r.url && !r.error);
+    const cards = validEnriched.length
+        ? validEnriched
+        : (response?.top || []).map((r) => ({
+            url: r.url,
+            title: new URL(r.url).hostname.replace(/^www\./, ""),
+            desc: r.desc,
+            image: "",
+        }));
 
-    wrapper.appendChild(card);
-  });
+    // Score set based on experimentation
+    // Used to identify environment focused results
+    const minSimilarity = 0.2;
+    if (topResult && topResult.score > minSimilarity && cards.length) {
+        const template = await fetch(chrome.runtime.getURL("sampleStructures/googleItem.html")).then(r => r.text());
+        const doc = new DOMParser().parseFromString(template, "text/html");
+        const styleEl = doc.querySelector("style");
+        const cardTemplate = doc.querySelector(".g");
 
-  const TopStuff = document.querySelector("#topstuff");
-  TopStuff.style = "background-color: #87FF65; border-radius: 20px; padding: 20px; border: 2px solid black; margin-bottom: 20px;";
-  TopStuff.replaceChildren(wrapper);
+        const wrapper = document.createElement("div");
+        if (styleEl) wrapper.appendChild(styleEl.cloneNode(true));
+
+        cards.slice(0, 3).forEach((result) => {
+            const card = cardTemplate.cloneNode(true);
+
+            const href = result.link || result.url;
+            const domain = new URL(href).hostname.replace(/^www\./, "");
+
+            const titleEl = card.querySelector("#articleTitle");
+            const descEl = card.querySelector("#articleDescription");
+            const imgEl = card.querySelector("#articleImage");
+            const link = card.querySelector("a.zReHs");
+            const cont = card.querySelector(".cont");
+
+            // Drop the template ids so the injected cards don't share duplicates.
+            titleEl.removeAttribute("id");
+            descEl.removeAttribute("id");
+            if (imgEl) imgEl.removeAttribute("id");
+
+            titleEl.textContent = result.title || domain;
+            titleEl.style.whiteSpace = "nowrap";
+            descEl.textContent = result.desc;
+            if (link) link.href = href;
+
+            if (imgEl && result.image) {
+                imgEl.src = result.image;
+                imgEl.alt = result.title || domain;
+            }
+
+            // Container hugs its title instead of stretching to full width.
+            if (cont) cont.style.width = "fit-content";
+
+            wrapper.appendChild(card);
+        });
+
+        const TopStuff = document.querySelector("#topstuff");
+        TopStuff.style = "background-color: #87FF65; border-radius: 20px; padding: 20px; border: 2px solid black; margin-bottom: 20px; width: fit-content;";
+        TopStuff.replaceChildren(wrapper);
+    }
 }
+
+function extractTopResult(doc, source) {
+    const organicCont = doc.querySelector('#search');
+    if (!organicCont) {
+        return {
+            error: `No search results found: ${doc.documentElement.outerHTML.slice(0, 500)}`,
+            fn: "extractTopResult",
+            url: source
+        };
+    }
+    const topCont = organicCont.querySelector('.yuRUbf');
+    if (!topCont) {
+        return {
+            error: `Top Container is missing: ${organicCont.outerHTML.slice(0, 500)}`,
+            fn: 'extractTopResult',
+            url: source
+        };
+    }
+
+    const botCont =
+        organicCont.querySelector('.IsZvec') ||
+        organicCont.querySelector('.VwiC3b') ||
+        organicCont.querySelector('[data-sncf]');
+
+    if (!botCont) {
+        return {
+            error: `Bottom Container is missing: ${organicCont.outerHTML.slice(0, 500)}`,
+            fn: 'extractTopResult',
+            url: source
+        };
+    }
+
+    const findings = {
+        title: topCont.querySelector('h3')?.textContent ?? null,
+        link: topCont.querySelector('a')?.href ?? null,
+        image: topCont.querySelector('img')?.src ?? null,
+        desc: botCont.textContent ?? null,
+        fn: 'extractTopResult',
+        url: source
+    };
+
+    console.log('extractTopResult findings:', findings);
+    return findings;
 }
+
+async function searchSite(searchQuery, source) {
+    const q = encodeURIComponent(`${searchQuery} site:${source}`);
+
+    let res;
+    try {
+        res = await fetch(`https://www.google.com/search?q=${q}&hl=en`, {
+            credentials: 'include'
+        });
+    } catch (e) {
+        return { error: `Fetch failed: ${e.message}`, fn: 'searchSite', url: source };
+    }
+
+    if (!res.ok) return { error: `HTTP ${res.status}`, fn: 'searchSite', url: source };
+
+    const html = await res.text();
+
+    if (!html) {
+        return { error: 'Empty response body', fn: 'searchSite', url: source };
+    }
+
+    let doc;
+    try {
+        doc = new DOMParser().parseFromString(html, 'text/html');
+    } catch (e) {
+        doc = document.implementation.createHTMLDocument('');
+        doc.documentElement.innerHTML = html;
+    }
+
+    if (!doc || !doc.body) {
+        return { error: 'doc failed to initialize', fn: 'searchSite', url: source };
+    }
+
+    if (doc.querySelector('parsererror')) {
+        return { error: 'Failed to parse HTML structure', fn: 'searchSite', url: source };
+    }
+
+    if (
+        /consent\.google\.|\/sorry\//.test(res.url) ||
+        doc.getElementById('recaptcha') ||
+        doc.body.textContent.includes('unusual traffic')
+    ) {
+        return { error: 'Blocked by Google consent/bot wall', fn: 'searchSite', url: source };
+    }
+
+    const searchCont = doc.querySelector('#gevUs')
+
+    if (!searchCont) {
+        return {
+            error: `Search container is missing: ${doc.documentElement.innerHTML.slice(0, 500)}`,
+            fn: 'searchSite',
+            url: source
+        };
+    }
+
+    return extractTopResult(searchCont, source);
+}
+
 fetchHTML();
