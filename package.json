@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@huggingface/transformers": "^4.2.0",
+    "axios": "^1.17.0"
+  }
+}

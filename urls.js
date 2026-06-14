@@ -1,7 +1,4 @@
-async function fetchHTML() {
-const searchQuery = new URLSearchParams(window.location.search).get("q");
-
-const urls = {
+    const urls = {
         "academic": {
             "urls": [
                 "https://www.biodiversityheritagelibrary.org/",
@@ -235,81 +232,4 @@ const urls = {
             ]
         }
 
-};
-
-const response = await chrome.runtime.sendMessage({
-  action: "getSimilarity",
-  payload: [searchQuery, urls]
-});
-
-console.log("Model Response:", response);
-const topResult = response?.best;
-const enriched = response?.enriched || [];
-
-// Surface any searchSite / extractTopResult failures (kept in `enriched` so the
-// model response carries the error and the function it happened in).
-const enrichErrors = enriched.filter((r) => r && r.error);
-if (enrichErrors.length) {
-  console.warn("Enrichment errors:", enrichErrors);
-}
-
-// Prefer the real Google `site:` hits the middleman fetched. Drop error
-// entries from what we render, and fall back to the locally-known source
-// descriptions if nothing enriched successfully.
-const validEnriched = enriched.filter((r) => r && r.url && !r.error);
-const cards = validEnriched.length
-  ? validEnriched
-  : (response?.top || []).map((r) => ({
-      url: r.url,
-      title: new URL(r.url).hostname.replace(/^www\./, ""),
-      desc: r.desc,
-      image: "",
-    }));
-
-if (topResult && topResult.score > 0.15 && cards.length) {
-  const template = await fetch(chrome.runtime.getURL("GoogleItem.html")).then(r => r.text());
-  const doc = new DOMParser().parseFromString(template, "text/html");
-  const styleEl = doc.querySelector("style");
-  const cardTemplate = doc.querySelector(".g");
-
-  // Build one populated card per result (up to 3).
-  const wrapper = document.createElement("div");
-  if (styleEl) wrapper.appendChild(styleEl.cloneNode(true));
-
-  cards.slice(0, 3).forEach((result) => {
-    const card = cardTemplate.cloneNode(true);
-    const domain = new URL(result.url).hostname.replace(/^www\./, "");
-
-    const titleEl = card.querySelector("#articleTitle");
-    const descEl = card.querySelector("#articleDescription");
-    const imgEl = card.querySelector("#articleImage");
-    const link = card.querySelector("a.zReHs");
-    const cont = card.querySelector(".cont");
-
-    // Drop the template ids so the injected cards don't share duplicates.
-    titleEl.removeAttribute("id");
-    descEl.removeAttribute("id");
-    if (imgEl) imgEl.removeAttribute("id");
-
-    titleEl.textContent = result.title || domain;
-    titleEl.style.whiteSpace = "nowrap";
-    descEl.textContent = result.desc;
-    if (link) link.href = result.url;
-    // Keep the template's default icon when no thumbnail was found.
-    if (imgEl && result.image) {
-      imgEl.src = result.image;
-      imgEl.alt = result.title || domain;
     }
-
-    // Container hugs its title instead of stretching to full width.
-    if (cont) cont.style.width = "fit-content";
-
-    wrapper.appendChild(card);
-  });
-
-  const TopStuff = document.querySelector("#topstuff");
-  TopStuff.style = "background-color: #87FF65; border-radius: 20px; padding: 20px; border: 2px solid black; margin-bottom: 20px;";
-  TopStuff.replaceChildren(wrapper);
-}
-}
-fetchHTML();

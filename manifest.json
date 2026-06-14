@@ -3,17 +3,25 @@
   "name": "Lies Make Fires",
   "description": "Runs on Google Search.",
   "version": "1.0",
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
     "content_scripts": [
         {
         "matches": ["*://www.google.com/search*"],
         "js": ["content.js"]
         }
     ],
-  "permissions": ["scripting", "activeTab"],
+  "permissions": ["scripting", "activeTab", "offscreen", "storage"],
+  "host_permissions": ["*://www.google.com/*"],
   "web_accessible_resources": [
     {
       "resources": ["GoogleItem.html"],
       "matches": ["*://www.google.com/*"]
     }
-  ]
+  ],
+  "content_security_policy": {
+  "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+}
 }
