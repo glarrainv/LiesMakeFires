@@ -1,2 +1,79 @@
-## #139A43
-## #FFFFFF
+# Lies Make Fires
+
+
+#### A Google Chrome Extension Targeting Environmental Misinformation
+ ![TransformersJS](https://img.shields.io/badge/transformers.js-%23FFD21E.svg?style=for-the-badge&logo=huggingface&logoColor=white) ![ONNX](https://img.shields.io/badge/onnx-%23ffffff.svg?style=for-the-badge&logo=onnx&logoColor=black) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)
+
+![misinformation-062025-2208969066](https://epe.brightspotcdn.com/cb/10/bd6bbc0844bc923d17609ee68abc/misinformation-062025-2208969066.jpg)
+
+| Scaleable | Universal | User-Friendly | Equitable |
+| ---------- | -------- | -------- | -------- | 
+| Runs locally on user's browser| Facts are universal | Lives right where you search | Helping people make our world better |
+| Handles infinite users simultaneously | Integrated with Google Translate | Identifies environment related queries and independantly pops up | No data collection Simplifies accurate research for all   |
+
+## Installation
+
+
+```shell
+git clone https://github.com/glarrainv/GreenHackathon
+```
+```
+Click manage extensions or go to: chrome://extensions/
+```
+```
+Click load unpacked and select the downloaded folder
+```
+
+![Image Guide](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0rZxpHHYUk-qeHhi0-u-ReXcPLRnSVwA2kw&s)
+
+**Happy Searching!**
+
+
+# Software Flow
+
+
+
+| Row Meaning| Step 1   | Step 2 | Step 3 |
+| -------- | -------- | -------- | -------- |
+|**Description**| Identify if search is ecology related by comparing with the description of selected sources. | Search sources found more related to the prompt for related articles in a background tab.| Once 3 specific articles are found across 3 related sources without errors display in active tab
+|**Tech Stack**|Transformers, Embeddings, Cosign Similarity| service worker, offscreen. | Fetch, Web Scraping, UI |
+
+***Model Used:** [onnx-community/all-MiniLM-L6-v2-ONNX](https://huggingface.co/onnx-community/all-MiniLM-L6-v2-ONNX)*
+
+# Research
+
+
+*One of the largest contributors to both climate doom and environmental misinformation is the current way that most search engines list search results. Search results are posted by popularity, clicks, and financial incentives rather than being the best, or most scientifically accurate, result for the question being asked.**
+
+## *The solution?*
+
+**Making verifiable environmental data as easy as adding an extension**
+**Once the extension is in place, the magic begins**
+
+The everyday person needs quick access to accurate and scientifically sound information at the click of a search
+
+## *What makes a source verifiable?*
+We generated a [spreadsheet](https://docs.google.com/spreadsheets/d/1cn_QvfDeKGHAC4uQzYpevC2DdG7hSAkY4A6hWApbI8M/edit?usp=sharing) full of verified sites that range from Private, to Government, to Academic that were tagged by their focus area and specialty
+
+## *Why THESE sources?*
+Resources were validated using the SIFT and CRAAP Method 
+![sift-infographic](https://hackmd.io/_uploads/SkZrXj2Wfg.png)
+![CRAAP-Test](https://hackmd.io/_uploads/rJPrXo3Zfg.png)
+
+> Source: https://guides.lib.uchicago.edu/c.php?g=1241077&p=9082322]
+
+**SIFTing through the CRAAP of the internet to provide the most relevant information first, before sponsored sites**
+
+
+[Video Link Here]
+
+
+> As areas of knowledge grow, 
+> so too do the perimeters of ignorance -Neil deGrasse Tyson
+![17655-niel-degrasse-tyson-quote](https://hackmd.io/_uploads/SyIeDo3Zfl.png)
+
+
+*Developed and Coded by Gank
+Conceputalized and Researched by Lexfantasea*
+
+
