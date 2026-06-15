@@ -1,9 +1,13 @@
 # Lies Make Fires
+#### A Google Chrome Extension Targeting Environmental Misinformation
+---
+<a href="https://github.com/glarrainv/LiesMakeFires/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=glarrainv/LiesMakeFires" />
+</a>
 
 *Developed and Coded by Gank   
 Conceputalized and Researched by Lexfantasea*
 
-#### A Google Chrome Extension Targeting Environmental Misinformation
  ![TransformersJS](https://img.shields.io/badge/transformers.js-%23FFD21E.svg?style=for-the-badge&logo=huggingface&logoColor=white) ![ONNX](https://img.shields.io/badge/onnx-%23ffffff.svg?style=for-the-badge&logo=onnx&logoColor=black) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)
 
 ![1mb plz (2) (1)](https://hackmd.io/_uploads/HyZqST2Wfg.gif)
