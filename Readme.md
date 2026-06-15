@@ -1,5 +1,7 @@
 # Lies Make Fires
 
+*Developed and Coded by Gank   
+Conceputalized and Researched by Lexfantasea*
 
 #### A Google Chrome Extension Targeting Environmental Misinformation
  ![TransformersJS](https://img.shields.io/badge/transformers.js-%23FFD21E.svg?style=for-the-badge&logo=huggingface&logoColor=white) ![ONNX](https://img.shields.io/badge/onnx-%23ffffff.svg?style=for-the-badge&logo=onnx&logoColor=black) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)
@@ -7,9 +9,21 @@
 ![1mb plz (2) (1)](https://hackmd.io/_uploads/HyZqST2Wfg.gif)
 <img width="1152" height="648" alt="1mb plz (2) (1)" src="https://github.com/user-attachments/assets/40be00ec-4ec7-4578-bd0e-eb8674d71121" />
 
+## Installation
+
+> 1. Download ZIP [Hackathon Release From Github](https://github.com/glarrainv/LiesMakeFires/releases/tag/Hackathon)
+> 
+> 2. Extract Zip 
+> 
+> 3. Click manage extensions or go to: [chrome://extensions/](chrome://extensions/)
+> 
+> 4. Click load unpacked and select the extracted folder 
+
+
+![Image Guide](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0rZxpHHYUk-qeHhi0-u-ReXcPLRnSVwA2kw&s)
+
 
 # Research
-
 
 *One of the largest contributors to both climate doom and environmental misinformation is the current way that most search engines list search results. Search results are posted by popularity, clicks, and financial incentives rather than being the best, or most scientifically accurate, result for the question being asked.*
 
@@ -26,22 +40,8 @@ The everyday person needs quick access to accurate and scientifically sound info
 | Runs locally on user's browser| Facts are universal | Lives right where you search | Helping people make our world better |
 | Handles infinite users simultaneously | Integrated with Google Translate | Identifies environment related queries and independantly pops up | No data collection Simplifies accurate research for all   |
 
-## Installation
+*Happy Searching!*
 
-
-```shell
-git clone https://github.com/glarrainv/GreenHackathon
-```
-```
-Click manage extensions or go to: chrome://extensions/
-```
-```
-Click load unpacked and select the downloaded folder
-```
-
-![Image Guide](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0rZxpHHYUk-qeHhi0-u-ReXcPLRnSVwA2kw&s)
-
-**Happy Searching!**
 
 # Software Flow
 
@@ -59,11 +59,9 @@ We generated a [spreadsheet](https://docs.google.com/spreadsheets/d/1cn_QvfDeKGH
 
 ## *Why THESE sources?*
 Resources were validated using the SIFT and CRAAP Method 
-![sift-infographic](https://hackmd.io/_uploads/SkZrXj2Wfg.png)
-<img width="962" height="514" alt="sift-infographic" src="https://github.com/user-attachments/assets/4fc634f6-ff47-487b-9003-01f54ee8adf6" />
+![sift-infographic](https://github.com/user-attachments/assets/4fc634f6-ff47-487b-9003-01f54ee8adf6)
 
-![CRAAP-Test](https://hackmd.io/_uploads/rJPrXo3Zfg.png)
-<img width="768" height="382" alt="CRAAP-Test" src="https://github.com/user-attachments/assets/6dd6a0d1-667d-4901-aa6d-f6df8e1034ba" />
+![CRAAP-Test](https://github.com/user-attachments/assets/6dd6a0d1-667d-4901-aa6d-f6df8e1034ba)
 
 
 > Source: https://guides.lib.uchicago.edu/c.php?g=1241077&p=9082322]
@@ -72,11 +70,7 @@ Resources were validated using the SIFT and CRAAP Method
 
 > As areas of knowledge grow, 
 > so too do the perimeters of ignorance 
-![17655-niel-degrasse-tyson-quote](https://hackmd.io/_uploads/SyIeDo3Zfl.png)
-<img width="1200" height="675" alt="17655-niel-degrasse-tyson-quote" src="https://github.com/user-attachments/assets/5ed9df3b-cff1-45e5-8b47-7a3e44baf72d" />
+![17655-niel-degrasse-tyson-quote](https://github.com/user-attachments/assets/5ed9df3b-cff1-45e5-8b47-7a3e44baf72d)
 
-
-*Developed and Coded by Gank
-Conceputalized and Researched by Lexfantasea*
 
 
