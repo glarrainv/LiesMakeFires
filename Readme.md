@@ -4,7 +4,20 @@
 #### A Google Chrome Extension Targeting Environmental Misinformation
  ![TransformersJS](https://img.shields.io/badge/transformers.js-%23FFD21E.svg?style=for-the-badge&logo=huggingface&logoColor=white) ![ONNX](https://img.shields.io/badge/onnx-%23ffffff.svg?style=for-the-badge&logo=onnx&logoColor=black) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)
 
-![misinformation-062025-2208969066](https://epe.brightspotcdn.com/cb/10/bd6bbc0844bc923d17609ee68abc/misinformation-062025-2208969066.jpg)
+![1mb plz (2) (1)](https://hackmd.io/_uploads/HyZqST2Wfg.gif)
+
+# Research
+
+
+*One of the largest contributors to both climate doom and environmental misinformation is the current way that most search engines list search results. Search results are posted by popularity, clicks, and financial incentives rather than being the best, or most scientifically accurate, result for the question being asked.**
+
+## *The solution?*
+
+**Making verifiable environmental data as easy as adding an extension**
+**Once the extension is in place, the magic begins**
+
+The everyday person needs quick access to accurate and scientifically sound information at the click of a search
+
 
 | Scaleable | Universal | User-Friendly | Equitable |
 | ---------- | -------- | -------- | -------- | 
@@ -28,10 +41,7 @@ Click load unpacked and select the downloaded folder
 
 **Happy Searching!**
 
-
 # Software Flow
-
-
 
 | Row Meaning| Step 1   | Step 2 | Step 3 |
 | -------- | -------- | -------- | -------- |
@@ -40,17 +50,7 @@ Click load unpacked and select the downloaded folder
 
 ***Model Used:** [onnx-community/all-MiniLM-L6-v2-ONNX](https://huggingface.co/onnx-community/all-MiniLM-L6-v2-ONNX)*
 
-# Research
 
-
-*One of the largest contributors to both climate doom and environmental misinformation is the current way that most search engines list search results. Search results are posted by popularity, clicks, and financial incentives rather than being the best, or most scientifically accurate, result for the question being asked.**
-
-## *The solution?*
-
-**Making verifiable environmental data as easy as adding an extension**
-**Once the extension is in place, the magic begins**
-
-The everyday person needs quick access to accurate and scientifically sound information at the click of a search
 
 ## *What makes a source verifiable?*
 We generated a [spreadsheet](https://docs.google.com/spreadsheets/d/1cn_QvfDeKGHAC4uQzYpevC2DdG7hSAkY4A6hWApbI8M/edit?usp=sharing) full of verified sites that range from Private, to Government, to Academic that were tagged by their focus area and specialty
@@ -64,12 +64,8 @@ Resources were validated using the SIFT and CRAAP Method
 
 **SIFTing through the CRAAP of the internet to provide the most relevant information first, before sponsored sites**
 
-
-[Video Link Here]
-
-
 > As areas of knowledge grow, 
-> so too do the perimeters of ignorance -Neil deGrasse Tyson
+> so too do the perimeters of ignorance 
 ![17655-niel-degrasse-tyson-quote](https://hackmd.io/_uploads/SyIeDo3Zfl.png)
 
 
