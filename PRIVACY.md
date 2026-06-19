@@ -112,4 +112,4 @@ This Privacy Policy is effective as of the date above and remains in effect exce
 For any questions or concerns about this Privacy Policy or the extension's data practices, contact us at:
 
 **Email:** glarrain@shoore.dev
-***https://github.com/glarrainv/LiesMakeFires
+**Open Source Code:** https://github.com/glarrainv/LiesMakeFires
