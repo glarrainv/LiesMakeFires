@@ -10,7 +10,7 @@ Conceputalized and Researched by Lexfantasea*
 
  ![TransformersJS](https://img.shields.io/badge/transformers.js-%23FFD21E.svg?style=for-the-badge&logo=huggingface&logoColor=white) ![ONNX](https://img.shields.io/badge/onnx-%23ffffff.svg?style=for-the-badge&logo=onnx&logoColor=black) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)
 
-![1mb plz (2) (1)](https://hackmd.io/_uploads/HyZqST2Wfg.gif)
+
 <img width="1152" height="648" alt="1mb plz (2) (1)" src="https://github.com/user-attachments/assets/40be00ec-4ec7-4578-bd0e-eb8674d71121" />
 
 ## Installation
