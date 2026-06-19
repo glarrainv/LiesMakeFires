@@ -52,7 +52,7 @@ The everyday person needs quick access to accurate and scientifically sound info
 | Row Meaning| Step 1   | Step 2 | Step 3 |
 | -------- | -------- | -------- | -------- |
 |**Description**| Identify if search is ecology related by comparing with the description of selected sources. | Search sources found more related to the prompt for related articles in a background tab.| Once 3 specific articles are found across 3 related sources without errors display in active tab
-|**Tech Stack**|Transformers, Embeddings, Cosign Similarity| service worker, offscreen. | Fetch, Web Scraping, UI |
+|**Tech Stack**|Transformers, Embeddings, Cosine Similarity| Service worker, Offscreen. | Fetch, Web Scraping, UI |
 
 ***Model Used:** [onnx-community/all-MiniLM-L6-v2-ONNX](https://huggingface.co/onnx-community/all-MiniLM-L6-v2-ONNX)*
 
