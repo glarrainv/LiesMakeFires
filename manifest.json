@@ -15,7 +15,7 @@
         "js": ["content.js"]
         }
     ],
-  "permissions": ["scripting", "activeTab", "offscreen", "storage"],
+  "permissions": ["offscreen"],
   "host_permissions": ["*://www.google.com/*"],
   "web_accessible_resources": [
     {
