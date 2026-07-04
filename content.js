@@ -248,6 +248,7 @@ async function fetchHTML() {
     async function initSearch() {
 
         const sources = (response?.top || []).map((item) => item.url);
+        const tag = response?.top?.[0]?.Tag || "academic";
 
         const enriched = [];
         let successes = 0;
@@ -289,22 +290,12 @@ async function fetchHTML() {
         const template = await fetch(chrome.runtime.getURL("sampleStructures/googleItem.html")).then(r => r.text());
         const doc = new DOMParser().parseFromString(template, "text/html");
         const styleEl = doc.querySelector("style");
-        const groupTemplate = doc.querySelector(".rse-group");
-        const cardTemplate = doc.querySelector(".rse-card");
+        const cardTemplate = doc.querySelector(".g");
 
-        // Build a hostname -> category lookup so each card can show its tag.
-        const categoryByHost = {};
-        for (const [category, group] of Object.entries(urls)) {
-            for (const u of group.urls) {
-                categoryByHost[normalizeHost(u)] = category;
-            }
-        }
+        const wrapper = document.createElement("div");
+        if (styleEl) wrapper.appendChild(styleEl.cloneNode(true));
 
         const cards = await initSearch();
-
-        const group = groupTemplate.cloneNode(true);
-        const list = group.querySelector(".rse-list");
-        list.replaceChildren();
 
         cards.slice(0, 3).forEach((result) => {
             const card = cardTemplate.cloneNode(true);
@@ -315,59 +306,33 @@ async function fetchHTML() {
             const titleEl = card.querySelector("#articleTitle");
             const descEl = card.querySelector("#articleDescription");
             const imgEl = card.querySelector("#articleImage");
-            const domainEl = card.querySelector("#articleDomain");
-            const tagEl = card.querySelector("#articleTag");
-            const link = card.querySelector(".rse-link");
+            const link = card.querySelector("a.zReHs");
+            const cont = card.querySelector(".cont");
 
-            // Drop the template ids so injected cards don't share duplicates.
-            [titleEl, descEl, imgEl, domainEl, tagEl].forEach((el) => el && el.removeAttribute("id"));
+            // Drop the template ids so the injected cards don't share duplicates.
+            titleEl.removeAttribute("id");
+            descEl.removeAttribute("id");
+            if (imgEl) imgEl.removeAttribute("id");
 
             titleEl.textContent = result.title || domain;
-            descEl.textContent = result.desc || "";
-            if (domainEl) domainEl.textContent = domain;
+            titleEl.style.whiteSpace = "nowrap";
+            descEl.textContent = result.desc;
             if (link) link.href = href;
 
-            // Favicon instead of a scraped thumbnail: cleaner and always present.
-            if (imgEl) {
-                imgEl.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-                imgEl.alt = "";
+            if (imgEl && result.image) {
+                imgEl.src = result.image;
+                imgEl.alt = result.title || domain;
             }
 
-            // TODO: source category tag. Best-effort match against the curated
-            // list by hostname; hidden when the source can't be resolved.
-            const category = result.category || categoryByHost[normalizeHost(result.url || href)];
-            if (tagEl) {
-                if (category) {
-                    tagEl.textContent = category.charAt(0).toUpperCase() + category.slice(1);
-                    tagEl.classList.add(`rse-tag-${category}`);
-                } else {
-                    tagEl.remove();
-                }
-            }
+            // Container hugs its title instead of stretching to full width.
+            if (cont) cont.style.width = "fit-content";
 
-            list.appendChild(card);
+            wrapper.appendChild(card);
         });
 
-        const wrapper = document.createElement("div");
-        if (styleEl) wrapper.appendChild(styleEl.cloneNode(true));
-        wrapper.appendChild(group);
-
         const TopStuff = document.querySelector("#topstuff");
-        TopStuff.removeAttribute("style");
+        TopStuff.style = "background-color: #87FF65; border-radius: 20px; padding: 20px; border: 2px solid black; margin-bottom: 20px; width: fit-content;";
         TopStuff.replaceChildren(wrapper);
-    }
-}
-
-// Normalize a URL to a bare hostname (drops protocol, www, path) so the
-// curated source list and live results match even when paths differ.
-function normalizeHost(u) {
-    try {
-        return new URL(u).hostname.replace(/^www\./, "");
-    } catch {
-        return String(u)
-            .replace(/^https?:\/\//, "")
-            .replace(/^www\./, "")
-            .replace(/[/?#].*$/, "");
     }
 }
 
