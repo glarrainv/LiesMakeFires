@@ -1,76 +1,186 @@
 <style>
-    .article {
-        color: #074427;
-        font-size: 24px;
-        font-weight: 700;
+    /* ================================================================
+       Reliable Environmental Sources — injected results card
+       Custom classes only. No gradients, no transparency, no alpha.
+       Theme via CSS variables; dark mode follows OS + Google's [dark].
+       ================================================================ */
+    .rse-group {
+        --surface: #ffffff;
+        --line: #dadce0;
+        --ink: #202124;
+        --sub: #5f6368;
+        --accent: #1a7f4b;
+
+        box-sizing: border-box;
+        max-width: 640px;
+        margin: 0 0 18px;
+        padding: 14px 16px 6px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        font-family: arial, Roboto, sans-serif;
     }
 
-    .q {
-        font-weight: bold;
-        font-size: 30px;
+    .rse-group * {
+        box-sizing: border-box;
     }
 
-    .ico {
-        height: 48px;
-        width: 48px;
-        padding: 5px;
+    .rse-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--line);
     }
 
-    .cent {
+    .rse-head-text {
+        display: flex;
         flex-direction: column;
-        display: flex;
-        align-items: center;
+        line-height: 1.25;
+        min-width: 0;
     }
 
-    .cont {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
+    .rse-head-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink);
     }
 
-    .p {
-        color: #074427;
-        font-size: 16px;
-        font-style: italic;
+    .rse-head-sub {
+        font-size: 12px;
+        color: var(--sub);
+    }
+
+    .rse-list {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .rse-card {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 14px 0;
+    }
+
+    .rse-card + .rse-card {
+        border-top: 1px solid var(--line);
+    }
+
+    .rse-favicon {
+        width: 28px;
+        height: 28px;
+        flex: none;
+        margin-top: 2px;
+        padding: 4px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        object-fit: contain;
+    }
+
+    .rse-body {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .rse-link {
+        display: inline-block;
+        max-width: 100%;
+        text-decoration: none;
+    }
+
+    .rse-title {
+        margin: 0;
+        font-size: 18px;
         font-weight: 500;
+        color: var(--accent);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .rse-link:hover .rse-title {
+        text-decoration: underline;
+    }
+
+    .rse-meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 3px 0 5px;
+    }
+
+    .rse-domain {
+        font-size: 13px;
+        color: var(--sub);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* --- category tag -------------------------------------------------
+       Distinct solid pill per source category. White text on solid fill
+       works in both light and dark. Default color if category unknown. */
+    .rse-tag {
+        flex: none;
+        padding: 2px 8px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: #ffffff;
+        background: var(--sub);
+        border-radius: 999px;
+    }
+
+    .rse-tag-academic   { background: #2f8f5b; }
+    .rse-tag-government { background: #3b6fd1; }
+    .rse-tag-private     { background: #c07a1e; }
+
+    .rse-desc {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.5;
+        color: var(--sub);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* --- dark mode ---------------------------------------------------- */
+    @media (prefers-color-scheme: dark) {
+        .rse-group {
+            --surface: #1f2023;
+            --line: #3c4043;
+            --ink: #e8eaed;
+            --sub: #9aa0a6;
+            --accent: #5fd08a;
+        }
+    }
+
+    html[dark] .rse-group {
+        --surface: #1f2023;
+        --line: #3c4043;
+        --ink: #e8eaed;
+        --sub: #9aa0a6;
+        --accent: #495e51;
     }
 </style>
-<div class="g">
-    <div class="N54PNb BToiNc" data-snc="eUdxMc">
-        <div class="cont">
-            <div class="notranslate ESMNde HGLrXd ojE3Fb cent">
-                <div class="q0vns">
-                    <span aria-hidden="true">
-                        <span class="DDKf1c">
-                            <div class="eqA2re UnOTSe Vwoesf" aria-hidden="true">
-                                <img class="XNo5Ab ico" id="articleImage"
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8HkNMYxBooSBrvUJpuImU5lZ4nICKjuhgKg&s"
-                                    alt="Article thumbnail" data-csiid="3a4sariZL4rI1sQPipLhsQw_4" data-atf="1">
-                            </div>
-                        </span>
-                    </span>
-                </div>
-            </div>
-            <div class="kb0PBd A9Y9g jGGQ5e" data-snf="x5WNvb" data-snhf="0">
-                <div class="yuRUbf">
-                    <div class="b8lM7">
-                        <span class="V9tjod">
-                            <a class="zReHs"
-                                href="https://scholar.google.com/scholar?as_ylo=2022&q=__SEARCH_QUERY__&hl=en&as_sdt=0,5">
-                                <h3 class="article LC20lb MBeuO DKV0Md" id="articleTitle">
-                                    An actual reliable result for: <span class="q">__SEARCH_QUERY__</span>
-                                </h3>
-                                <br>
-                            </a>
-                        </span>
-                    </div>
-                </div>
-                <div class="kb0PBd A9Y9g" data-snf="nke7rc" data-sncf="1">
-                    <div class="VwiC3b yXK7lf p4wth r025kc Hdw6tb" style="-webkit-line-clamp:2">
-                        <span id="articleDescription" class="p">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
-                    </div>
-                </div>
-            </div>
+
+<!-- Card template: content.js clones this once per result into .rse-list. -->
+<div class="rse-card">
+    <img class="rse-favicon" id="articleImage" src="https://www.google.com/s2/favicons?domain=epa.gov&sz=64" alt="">
+    <div class="rse-body">
+        <a class="rse-link" href="https://scholar.google.com/scholar?as_ylo=2022&q=__SEARCH_QUERY__&hl=en&as_sdt=0,5">
+            <h3 class="rse-title" id="articleTitle">An actual reliable result for: __SEARCH_QUERY__</h3>
+        </a>
+        <div class="rse-meta">
+            <span class="rse-domain" id="articleDomain">example.org</span>
+            <!-- TODO: category set by content.js -> academic | government | private -->
+            <span class="rse-tag" id="articleTag">Academic</span>
         </div>
+        <p class="rse-desc" id="articleDescription">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
     </div>
 </div>
