@@ -37,22 +37,33 @@ async function embed(extractor, texts) {
     return output.tolist();
 }
 
+// Partial Fisher-Yates: returns up to n unique random indices in [0, length).
+function sampleIndices(length, n) {
+    const idx = Array.from({ length }, (_, i) => i);
+    const count = Math.min(n, length);
+    for (let i = 0; i < count; i++) {
+        const j = i + Math.floor(Math.random() * (length - i));
+        [idx[i], idx[j]] = [idx[j], idx[i]];
+    }
+    return idx.slice(0, count);
+}
+
 async function getSimilarity(prompt, urls) {
 
     // Init constants and extractor call
-    const itemLimit = 5;
+    const itemLimit = 7;
     const extractor = await getExtractor();
     const items = [];
 
-    // Select random source from each category.
+    // Select up to itemLimit random sources from each category.
     for (const [category, data] of Object.entries(urls)) {
         if (!data || !Array.isArray(data.urls)) continue;
 
-        data.urls.slice(0, itemLimit).forEach((url, i) => {
+        sampleIndices(data.urls.length, itemLimit).forEach((i) => {
             if (data.desc && data.desc[i]) {
                 items.push({
                     category,
-                    url,
+                    url: data.urls[i],
                     desc: data.desc[i]
                 });
             }

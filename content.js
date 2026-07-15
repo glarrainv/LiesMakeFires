@@ -14,10 +14,10 @@ async function fetchHTML() {
                 "https://www.ebsco.com/",
                 "https://ehp.niehs.nih.gov/",
                 "https://ifu.ethz.ch/en",
-                "https://www.anglia.ac.uk/research/groups/global-sustainability-institute",
+                "https://www.anglia.ac.uk/",
                 "https://scholar.google.com/",
                 "https://iclei.org/",
-                "https://www.imperial.ac.uk/grantham/",
+                "https://www.imperial.ac.uk/",
                 "https://daily.jstor.org/",
                 "https://www.mpic.de/en",
                 "https://climate.mit.edu/",
@@ -28,14 +28,14 @@ async function fetchHTML() {
                 "https://www.researchgate.net/",
                 "https://sciencebasedtargets.org/",
                 "https://www.nier.go.kr/eng/",
-                "https://www.bafu.admin.ch/bafu/en/index.html",
+                "https://www.bafu.admin.ch/",
                 "https://www.theclimategroup.org/",
                 "https://ced.berkeley.edu/",
                 "https://www.nus.edu.sg/",
                 "https://www.tcd.ie/",
                 "https://www.epa.gov/",
                 "https://www.cbd.int/",
-                "https://www.worldbank.org/en/topic/environment",
+                "https://www.worldbank.org/",
                 "https://public.wmo.int/",
                 "https://www.worldwildlife.org/",
                 "https://www.wri.org/",
@@ -87,7 +87,7 @@ async function fetchHTML() {
                 "https://www.climate.gov/",
                 "https://www.energy.gov/",
                 "https://www.dcceew.gov.au/",
-                "https://www.canada.ca/en/services/environment/weather/ec-meteorological-service-canada.html",
+                "https://www.canada.ca/",
                 "https://www.eea.europa.eu/",
                 "https://www.umweltbundesamt.de/en",
                 "https://mausam.imd.gov.in/",
@@ -177,7 +177,7 @@ async function fetchHTML() {
                 "https://www.sierraclub.org/",
                 "https://www.si.edu/",
                 "https://sustainability.stanford.edu/",
-                "https://www.theconversation.com/us/environment",
+                "https://www.theconversation.com/",
                 "https://www.nature.org/",
                 "https://www.wilderness.org/",
                 "https://www.titech.ac.jp/english/",
@@ -189,8 +189,8 @@ async function fetchHTML() {
                 "https://www.audubon.org/",
                 "https://www.weizmann.ac.il/",
                 "https://www.wiley.com/en-us/",
-                "https://www.globalreporting.org/standards/",
-                "https://www.ucs.org/resources/reports"
+                "https://www.globalreporting.org/",
+                "https://www.ucs.org/"
             ],
             "desc": [
                 "African species protection, community conservation, habitat management",
@@ -248,7 +248,6 @@ async function fetchHTML() {
     async function initSearch() {
 
         const sources = (response?.top || []).map((item) => item.url);
-        const tag = response?.top?.[0]?.Tag || "academic";
 
         const enriched = [];
         let successes = 0;
@@ -284,18 +283,28 @@ async function fetchHTML() {
 
     // Score set based on experimentation
     // Used to identify environment focused results
-    const minSimilarity = 0.27;
+    const minSimilarity = 0.25;
     if (topResult.score > minSimilarity) {
 
         const template = await fetch(chrome.runtime.getURL("sampleStructures/googleItem.html")).then(r => r.text());
         const doc = new DOMParser().parseFromString(template, "text/html");
         const styleEl = doc.querySelector("style");
-        const cardTemplate = doc.querySelector(".g");
+        const groupTemplate = doc.querySelector(".rse-group");
+        const cardTemplate = doc.querySelector(".rse-card");
 
-        const wrapper = document.createElement("div");
-        if (styleEl) wrapper.appendChild(styleEl.cloneNode(true));
+        // Build a hostname -> category lookup so each card can show its tag.
+        const categoryByHost = {};
+        for (const [category, group] of Object.entries(urls)) {
+            for (const u of group.urls) {
+                categoryByHost[normalizeHost(u)] = category;
+            }
+        }
 
         const cards = await initSearch();
+
+        const group = groupTemplate.cloneNode(true);
+        const list = group.querySelector(".rse-list");
+        list.replaceChildren();
 
         cards.slice(0, 3).forEach((result) => {
             const card = cardTemplate.cloneNode(true);
@@ -306,33 +315,59 @@ async function fetchHTML() {
             const titleEl = card.querySelector("#articleTitle");
             const descEl = card.querySelector("#articleDescription");
             const imgEl = card.querySelector("#articleImage");
-            const link = card.querySelector("a.zReHs");
-            const cont = card.querySelector(".cont");
+            const domainEl = card.querySelector("#articleDomain");
+            const tagEl = card.querySelector("#articleTag");
+            const link = card.querySelector(".rse-link");
 
-            // Drop the template ids so the injected cards don't share duplicates.
-            titleEl.removeAttribute("id");
-            descEl.removeAttribute("id");
-            if (imgEl) imgEl.removeAttribute("id");
+            // Drop the template ids so injected cards don't share duplicates.
+            [titleEl, descEl, imgEl, domainEl, tagEl].forEach((el) => el && el.removeAttribute("id"));
 
             titleEl.textContent = result.title || domain;
-            titleEl.style.whiteSpace = "nowrap";
-            descEl.textContent = result.desc;
+            descEl.textContent = result.desc || "";
+            if (domainEl) domainEl.textContent = domain;
             if (link) link.href = href;
 
-            if (imgEl && result.image) {
-                imgEl.src = result.image;
-                imgEl.alt = result.title || domain;
+            // Favicon instead of a scraped thumbnail: cleaner and always present.
+            if (imgEl) {
+                imgEl.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+                imgEl.alt = "";
             }
 
-            // Container hugs its title instead of stretching to full width.
-            if (cont) cont.style.width = "fit-content";
+            // TODO: source category tag. Best-effort match against the curated
+            // list by hostname; hidden when the source can't be resolved.
+            const category = result.category || categoryByHost[normalizeHost(result.url || href)];
+            if (tagEl) {
+                if (category) {
+                    tagEl.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+                    tagEl.classList.add(`rse-tag-${category}`);
+                } else {
+                    tagEl.remove();
+                }
+            }
 
-            wrapper.appendChild(card);
+            list.appendChild(card);
         });
 
+        const wrapper = document.createElement("div");
+        if (styleEl) wrapper.appendChild(styleEl.cloneNode(true));
+        wrapper.appendChild(group);
+
         const TopStuff = document.querySelector("#topstuff");
-        TopStuff.style = "background-color: #87FF65; border-radius: 20px; padding: 20px; border: 2px solid black; margin-bottom: 20px; width: fit-content;";
+        TopStuff.removeAttribute("style");
         TopStuff.replaceChildren(wrapper);
+    }
+}
+
+// Normalize a URL to a bare hostname (drops protocol, www, path) so the
+// curated source list and live results match even when paths differ.
+function normalizeHost(u) {
+    try {
+        return new URL(u).hostname.replace(/^www\./, "");
+    } catch {
+        return String(u)
+            .replace(/^https?:\/\//, "")
+            .replace(/^www\./, "")
+            .replace(/[/?#].*$/, "");
     }
 }
 

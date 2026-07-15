@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
   "name": "Lies Make Fires - Environmental fact checker",
-  "short_name": "Lies Make Fires",
-  "description": "The fact checking extension for environmental research. Simple, fast and friendly.",
-  "version": "2.0.0",
-  "version_name": "2.0.0 Official",
+  "short_name": "Climate fact checker",
+  "description": "The fact checking extension for environmental research; stopping climate misinformation.",
+  "version": "2.1.0",
+  "version_name": "2.1.0 BETA",
    "icons": {
    "128": "ico128.png"
   },
