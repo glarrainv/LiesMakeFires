@@ -13,7 +13,12 @@ Conceputalized and Researched by Lexfantasea*
 ![1mb plz (2) (1)](https://hackmd.io/_uploads/HyZqST2Wfg.gif)
 <img width="1152" height="648" alt="1mb plz (2) (1)" src="https://github.com/user-attachments/assets/40be00ec-4ec7-4578-bd0e-eb8674d71121" />
 
-## Installation
+## Public Release
+
+> [Chrome Web Store](https://chromewebstore.google.com/detail/lies-make-fires-environme/mnldmfombdbnabdedkcppgagobebniaj)
+
+
+#### Local Installation
 
 > 1. Download ZIP [Hackathon Release From Github](https://github.com/glarrainv/LiesMakeFires/releases/tag/Hackathon)
 > 
