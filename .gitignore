@@ -4,3 +4,5 @@ wasm
 dist_
 *.crx
 *.pem
+package/
+*.zip

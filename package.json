@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "pack": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/pack.ps1"
+  },
   "dependencies": {
     "@huggingface/transformers": "^4.2.0"
   }

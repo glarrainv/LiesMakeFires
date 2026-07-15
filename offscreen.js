@@ -22,7 +22,7 @@ const descEmbeddingCache = new Map();
 function getExtractor() {
     if (!extractorPromise) {
         extractorPromise = pipeline('feature-extraction', 'onnx-community/all-MiniLM-L6-v2-ONNX', {
-            dtype: 'fp32',
+            dtype: 'q4f16',
         });
     }
     return extractorPromise;

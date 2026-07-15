@@ -259,7 +259,9 @@ async function fetchHTML() {
             }));
             if (!result) continue;
             enriched.push(result);
-            if (!result.error && ++successes >= 3) break;
+            if (result.blocked) break;                  // Google rate-limiting Check
+            if (!result.error && ++successes >= 3) break;  // Result end either success or crash
+            await wait(400);                            // Throttling
         }
 
         const enrichErrors = enriched.filter((r) => r && r.error);
@@ -352,11 +354,14 @@ async function fetchHTML() {
         if (styleEl) wrapper.appendChild(styleEl.cloneNode(true));
         wrapper.appendChild(group);
 
-        const TopStuff = document.querySelector("#topstuff");
-        TopStuff.removeAttribute("style");
-        TopStuff.replaceChildren(wrapper);
+        const Cont = document.querySelector("#oFNiHe") || document.querySelector("#topstuff");
+        Cont.removeAttribute("style");
+        Cont.replaceChildren(wrapper);
     }
 }
+
+// Simple delay used to throttle sequential Google requests.
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Normalize a URL to a bare hostname (drops protocol, www, path) so the
 // curated source list and live results match even when paths differ.
@@ -416,7 +421,7 @@ function extractTopResult(doc, source) {
 }
 
 async function searchSite(searchQuery, source) {
-    const q = encodeURIComponent(`${searchQuery} site:${source}`);
+    const q = encodeURIComponent(`${searchQuery} site:${normalizeHost(source)}`);
 
     let res;
     try {
@@ -427,7 +432,12 @@ async function searchSite(searchQuery, source) {
         return { error: `Fetch failed: ${e.message}`, fn: 'searchSite', url: source };
     }
 
-    if (!res.ok) return { error: `HTTP ${res.status}`, fn: 'searchSite', url: source };
+    if (!res.ok) return {
+        error: `HTTP ${res.status}`,
+        fn: 'searchSite',
+        url: source,
+        blocked: res.status === 429 || res.status === 503
+    };
 
     const html = await res.text();
 
@@ -456,7 +466,7 @@ async function searchSite(searchQuery, source) {
         doc.getElementById('recaptcha') ||
         doc.body.textContent.includes('unusual traffic')
     ) {
-        return { error: 'Blocked by Google consent/bot wall', fn: 'searchSite', url: source };
+        return { error: 'Blocked by Google consent/bot wall', fn: 'searchSite', url: source, blocked: true };
     }
 
     const searchCont = doc.querySelector('#gevUs')
