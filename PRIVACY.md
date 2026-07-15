@@ -28,7 +28,7 @@ Lies Make Fires solely accesses and stores data within the user's Chrome browser
 To do its job, the extension reads and processes certain information **locally, in your browser**:
 
 - **Your search query text.** When you perform a Google Search, the extension reads the text of your query so a local text-classification model can determine whether it is environment-related. Queries that are not environment-related are ignored, so your normal browsing is not disrupted.
-- **Website content from search and offloaded tabs.** When a query is identified as environment-related, the extension may access content from the search results and from an offloaded tab in order to retrieve and present accurate environmental information. Under the Chrome Web Store's data categories, this is classified as **Website content** and **User activity**.
+- **Website content from search and offloaded tabs.** When a query is identified as environment-related, the extension may access content from the search results and from an offloaded tab in order to retrieve and present accurate environmental information. Under the Chrome Web Store's data categories, this is classified as **Website content**.
 - **Your saved preferences.** Any settings you choose are stored locally on your device (for example, via your browser's local extension storage) so the extension behaves the way you expect.
 
 This access is limited to delivering the extension's single purpose: surfacing accurate, verifiable environmental information within Google Search.
